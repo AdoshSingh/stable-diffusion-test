@@ -1,17 +1,43 @@
-version: '3.8'
+version: '3.9'
+
 services:
-  backend:
+
+  mongo_db:
+    container_name: db_container
+    image: mongo
+    command: mongod --quiet --logpath /dev/null
+    restart: always
+    volumes:
+      - mongo_db:/data/db
+
+  api:
     build: ./backend
     ports:
       - "8000:8000"
     environment:
       - API_KEY=${API_KEY}
-    volumes:
-      - ./backend:/usr/src/app
+      - MONGO_URI=mongodb://mongo_db:27017/stable-db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      - mongo_db
 
   frontend:
     build: ./frontend
     ports:
-      - "5173:5173"
+      - "4173:4173"
     depends_on:
-      - backend
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4173/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo_db: {}

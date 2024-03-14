@@ -17,7 +17,7 @@ const SampleImages: React.FC<Props> = ({sampleImages}) => {
                 <div className="w-full rounded-xl shadow-lg">
                   <img
                     className="object-cover rounded-lg w-full h-full"
-                    src={`http://localhost:8000/api/sample-image?imageName=${image.name}`}
+                    src={`http://localhost:8000/api/image/sample/${image.name}`}
                     alt=""
                   />
                 </div>

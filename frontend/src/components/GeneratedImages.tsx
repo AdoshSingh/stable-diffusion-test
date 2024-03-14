@@ -17,7 +17,7 @@ const GeneratedImages: React.FC<Props> = ({generatedImages}) => {
               <div className="w-full rounded-xl shadow-lg">
                 <img
                   className="object-cover rounded-lg w-full h-full"
-                  src={`http://localhost:8000/api/generated-image?imageName=${image.name}`}
+                  src={`http://localhost:8000/api/image/generated/${image.name}`}
                   alt=""
                 />
               </div>
